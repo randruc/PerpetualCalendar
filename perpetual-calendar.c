@@ -213,8 +213,7 @@ main(int argc, char *argv[])
     month = 1;  
   }
 
-  sum = 0;
-  sum += firstDayOfMonth;
+  sum = firstDayOfMonth;
   sum += year - referenceYear;
   sum += referenceYearFirstDays[month - 1];
   sum += countLeapYears(referenceYear, year, &isLeapYear);
