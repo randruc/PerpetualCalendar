@@ -213,20 +213,19 @@ main(int argc, char *argv[])
     month = 1;  
   }
 
-  sum = firstDayOfMonth;
-  sum += year - referenceYear;
+  sum = year - referenceYear;
   sum += referenceYearFirstDays[month - 1];
   sum += countLeapYears(referenceYear, year, &isLeapYear);
 
-  offset = (sum - 1) % 7;
+  offset = sum % 7;
 
-  if (!withMonth) {
+  if (withMonth) {
+    printMonth(month, year, offset, isLeapYear);
+  } else {
     for (i = 1; i <= 12; i++) {
       offset = printMonth(i, year, offset, isLeapYear);
       fputc('\n', stdout);
     }
-  } else {              
-    printMonth(month, year, offset, isLeapYear);
   }
     
   exit(EXIT_SUCCESS);
