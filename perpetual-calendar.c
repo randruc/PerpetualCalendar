@@ -3,7 +3,7 @@
  * Gilbert Andruccioli
  * June 2018
  * 
- * This code is in the public domain.
+ * This program is in the public domain.
  * 
  * Usage: perpetual-calendar <year> [<month>]
  * 
