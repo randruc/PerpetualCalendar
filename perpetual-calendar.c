@@ -13,7 +13,7 @@
  * 
  * The original formula was given to me by my grandfather Gilbert Andruccioli
  * who used to implement it in BASIC on the TI-99/4A computer. We reimplemented
- * it in C and add some features.
+ * it in C and added some features.
  * This program takes into account the actual formula to determine leap years
  * (instead of just dividing by 4).
  * https://en.wikipedia.org/wiki/Leap_year
@@ -65,6 +65,7 @@ static void
 die(const char * const fmt, ...)
 {
   va_list args;
+  
   va_start(args, fmt);
   vfprintf(stderr, fmt, args);
   va_end(args);
