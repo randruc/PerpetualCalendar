@@ -48,18 +48,20 @@ static const int referenceYearFirstDays[] = {
 };
 
 static const char *weekDays[] = {
-  "mon ",
-  "tue ",
-  "wed ",
-  "thu ",
-  "fri ",
-  "sat ",
-  "sun "
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+  "sun"
 };
 
 static const int firstDayOfMonth = 1;
 
 static const int referenceYear = 1703;
+
+static const int fieldWidth = 4;
 
 static void
 die(const char * const fmt, ...)
@@ -78,7 +80,7 @@ allCharsDigit(const char * const s)
 {
   const char * c;
 
-  for (c = s; *c != '\0'; c++) {
+  for (c = s; *c != '\0'; ++c) {
     if (isspace(*c)) {
       continue;
     }
@@ -109,9 +111,9 @@ countLeapYears(const int startYear, const int endYear, int * const isLeapYear)
   int i;
   int totalLeapYears = 0;
 
-  for (i = startYear; i <= endYear; i++) {
+  for (i = startYear; i < endYear; ++i) {
     if (testLeapYear(i)) {
-      totalLeapYears++;
+      ++totalLeapYears;
     }
   }
 
@@ -163,14 +165,14 @@ printMonth(int month, int year, int offset, int isLeapYear) {
 
   fprintf(stdout, "%s %d\n", months[month -1], year);
 
-  for (i = 0; i < 7; i++) {
-    fputs(weekDays[i], stdout);
+  for (i = 0; i < 7; ++i) {
+    fprintf(stdout, "%-*s", fieldWidth, weekDays[i]);
   }
 
   fputc('\n', stdout);
 
-  for (i = 0; i < offset; i++) {
-    fputs("    ", stdout);
+  for (i = 0; i < offset; ++i) {
+    fprintf(stdout, "%*s", fieldWidth, "");
   }
 
   lastDayInMonth = daysInMonth[month - 1];
@@ -179,11 +181,10 @@ printMonth(int month, int year, int offset, int isLeapYear) {
     lastDayInMonth++;
   }
 
-  for (i = firstDayOfMonth; i <= lastDayInMonth; i++) {
-    fprintf(stdout, "%-4d", i);
-    offset++;
+  for (i = firstDayOfMonth; i <= lastDayInMonth; ++i) {
+    fprintf(stdout, "%-*d", fieldWidth, i);
 
-    if (7 == offset) {
+    if (7 == ++offset) {
       if (i != lastDayInMonth) {
         fputc('\n', stdout);
       }
@@ -206,9 +207,8 @@ main(int argc, char *argv[])
   int offset;
   int i;
   int isLeapYear;
-  int withMonth;
-
-  withMonth = obtainArgs(&month, &year, argc, argv);
+  const int withMonth = obtainArgs(&month, &year, argc, argv);
+  
   if(!withMonth) {
     month = 1;  
   }
@@ -217,12 +217,16 @@ main(int argc, char *argv[])
   sum += referenceYearFirstDays[month - 1];
   sum += countLeapYears(referenceYear, year, &isLeapYear);
 
+  if (isLeapYear && withMonth && (month > 2)) {
+    ++sum;
+  }
+  
   offset = sum % 7;
 
   if (withMonth) {
     printMonth(month, year, offset, isLeapYear);
   } else {
-    for (i = 1; i <= 12; i++) {
+    for (i = 1; i <= 12; ++i) {
       offset = printMonth(i, year, offset, isLeapYear);
       fputc('\n', stdout);
     }
